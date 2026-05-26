@@ -82,7 +82,7 @@ public class TwoMeanTTest {
             }
 
             // Large Counts condition
-            if (sampleSize1 > 30 && sampleSize2 > 30) {
+            if (sampleSize1 >= 30 && sampleSize2 >= 30) {
                 pw.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
             } else {
                 pw.println("Does the problem say the sampling distribution is approximately normal? (type true or false): ");

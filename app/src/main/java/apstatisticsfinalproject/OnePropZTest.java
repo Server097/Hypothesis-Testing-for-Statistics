@@ -67,7 +67,7 @@ public class OnePropZTest {
             }
 
             // Large Counts condition
-            if (sampleSize * nullProp > 10 && sampleSize * (1 - nullProp) > 10) {
+            if (sampleSize * nullProp >= 10 && sampleSize * (1 - nullProp) >= 10) {
                 pw.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
             } else {
                 pw.println("Does the problem say the sampling distribution is approximately normal? (type true or false): ");

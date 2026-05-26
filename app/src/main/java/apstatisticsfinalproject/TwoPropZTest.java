@@ -76,7 +76,7 @@ public class TwoPropZTest {
             }
 
             // Large Counts condition
-            if (sampleSize1 * nullProp > 10 && sampleSize1 * (1 - nullProp) > 10 && sampleSize2 * nullProp > 10 && sampleSize2 * (1 - nullProp) > 10) {
+            if (sampleSize1 * nullProp >= 10 && sampleSize1 * (1 - nullProp) >= 10 && sampleSize2 * nullProp >= 10 && sampleSize2 * (1 - nullProp) >= 10) {
                 pw.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
             } else {
                 pw.println("Does the problem say the sampling distribution is approximately normal? (type true or false): ");

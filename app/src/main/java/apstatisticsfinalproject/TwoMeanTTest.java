@@ -123,20 +123,20 @@ public class TwoMeanTTest {
                 "sample statistic equal to or less than the one observed in our sample purely by chance.");
                 if (pValue <= alphaLevel) {
                     pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
-                    "evidence that the alternate hypothesis (p < " + df.format(nullDiff) + ") is true.");
+                    "evidence that the alternate hypothesis (p < " + df.format(alternateDiff) + ") is true.");
                 } else {
                     pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
-                    "convincing evidence that the alternate hypothesis (p < " + df.format(nullDiff) + ") is true.");
+                    "convincing evidence that the alternate hypothesis (p < " + df.format(alternateDiff) + ") is true.");
                 }
             } else if (alternateHypothesisSign.equals(">")) {
                 pw.println("Assuming the null hypothesis is true (p = " + df.format(nullDiff) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
                 "sample statistic equal to or greater than the one observed in our sample purely by chance.");
                 if (pValue <= alphaLevel) {
                     pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
-                    "evidence that the alternate hypothesis (p > " + df.format(nullDiff) + ") is true.");
+                    "evidence that the alternate hypothesis (p > " + df.format(alternateDiff) + ") is true.");
                 } else {
                     pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
-                    "convincing evidence that the alternate hypothesis (p > " + df.format(nullDiff) + ") is true.");
+                    "convincing evidence that the alternate hypothesis (p > " + df.format(alternateDiff) + ") is true.");
                 }
             } else {
                 pw.println("Assuming the null hypothesis is true (p = " + df.format(nullDiff) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +

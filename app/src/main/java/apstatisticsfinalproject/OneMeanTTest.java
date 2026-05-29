@@ -15,12 +15,11 @@ public class OneMeanTTest {
             PrintStream pw = new PrintStream(System.out);
 
             pw.println("Enter null hypothesis (format - 'μ = 0'): ");
-            double nullMean = Double.parseDouble(br.readLine().split(" ")[2]);
+            double hypothesisMean = Double.parseDouble(br.readLine().split(" ")[2]);
 
             pw.println("Enter alternate hypothesis (format - 'μ </>/!= 0'): ");
             String[] words = br.readLine().split(" ");
             String alternateHypothesisSign = words[1];
-            double alternateMean = Double.parseDouble(words[2]);
 
             pw.println("Enter sample mean (for sample 1): ");
             double sampleMean = Double.parseDouble(br.readLine());
@@ -106,34 +105,34 @@ public class OneMeanTTest {
 
         // Conclude
             if (alternateHypothesisSign.equals("<")) {
-                pw.println("Assuming the null hypothesis is true (p = " + df.format(nullMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
+                pw.println("Assuming the null hypothesis is true (p = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
                 "sample statistic equal to or less than the one observed in our sample purely by chance.");
                 if (pValue <= alphaLevel) {
                     pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
-                    "evidence that the alternate hypothesis (p < " + df.format(alternateMean) + ") is true.");
+                    "evidence that the alternate hypothesis (μ < " + df.format(hypothesisMean) + ") is true.");
                 } else {
                     pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
-                    "convincing evidence that the alternate hypothesis (p < " + df.format(alternateMean) + ") is true.");
+                    "convincing evidence that the alternate hypothesis (μ < " + df.format(hypothesisMean) + ") is true.");
                 }
             } else if (alternateHypothesisSign.equals(">")) {
-                pw.println("Assuming the null hypothesis is true (p = " + df.format(nullMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
+                pw.println("Assuming the null hypothesis is true (p = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
                 "sample statistic equal to or greater than the one observed in our sample purely by chance.");
                 if (pValue <= alphaLevel) {
                     pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
-                    "evidence that the alternate hypothesis (p > " + df.format(alternateMean) + ") is true.");
+                    "evidence that the alternate hypothesis (μ > " + df.format(hypothesisMean) + ") is true.");
                 } else {
                     pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
-                    "convincing evidence that the alternate hypothesis (p > " + df.format(alternateMean) + ") is true.");
+                    "convincing evidence that the alternate hypothesis (μ > " + df.format(hypothesisMean) + ") is true.");
                 }
             } else {
-                pw.println("Assuming the null hypothesis is true (p = " + df.format(nullMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
+                pw.println("Assuming the null hypothesis is true (p = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
                 "sample statistic as extreme or more extreme than the one observed in our sample in either direction, purely by chance.");
                 if (pValue <= alphaLevel) {
                     pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
-                    "evidence that the alternate hypothesis (p != " + df.format(alternateMean) + ") is true.");
+                    "evidence that the alternate hypothesis (μ != " + df.format(hypothesisMean) + ") is true.");
                 } else {
                     pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
-                    "convincing evidence that the alternate hypothesis (p != " + df.format(alternateMean) + ") is true.");
+                    "convincing evidence that the alternate hypothesis (μ != " + df.format(hypothesisMean) + ") is true.");
                 }
             }
 

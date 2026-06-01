@@ -1,4 +1,5 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "vim.enable": false
+    "vim.enable": false,
+    "java.debug.settings.onBuildFailureProceed": true
 }

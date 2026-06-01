@@ -1,21 +1,21 @@
 Null hypothesis (H_0): μ = 0.0
 
-Alternative hypothesis (H_A): μ > 0.0
+Alternate hypothesis (H_A): μ > 0.0
 
-sample mean for sample 1 = 2.3
+sample mean = 21.0
 
-standard deviation for sample 1 = 1.7
+standard deviation = 9.6
 
-sample size for sample 1 = 3
+sample size = 53
 
-alpha level = 0.5
+alpha level = 0.05
 
-t statistic = 2.343362857299069
+t statistic = 15.925240382801134
 
-degrees of freedom = 2
+degrees of freedom = 52
 
-p value = 0.072
+p value = 0.0
 
-Assuming the null hypothesis is true (p = 0), there is approximately a 0.072 probability of obtaining a sample statistic equal to or greater than the one observed in our sample purely by chance.
+Assuming the null hypothesis is true (p = 0), there is approximately a 0 probability of obtaining a sample statistic equal to or greater than the one observed in our sample purely by chance.
 
-Because the p value (0.072) is less than 0.5, we successfully reject the null and have convincing evidence that the alternate hypothesis (μ > 0) is true.
+Because the p value (0) is less than 0.05, we successfully reject the null and have convincing evidence that the alternate hypothesis (μ > 0) is true.

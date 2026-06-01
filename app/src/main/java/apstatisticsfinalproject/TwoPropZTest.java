@@ -46,7 +46,7 @@ public class TwoPropZTest {
             fileWriter.println();
             double sampleProp2 = (double) successes2 / sampleSize2;
 
-            double alphaLevel = Utilities.readDouble(screenReader, screenWriter, "Enter alpha level: ", 0);
+            double alphaLevel = Utilities.readDouble(screenReader, screenWriter, "Enter alpha level: ", 0.05);
             fileWriter.println("alpha level = " + alphaLevel);
             fileWriter.println();
 
@@ -133,10 +133,10 @@ public class TwoPropZTest {
                 Utilities.writeMessage(msg, screenWriter, fileWriter);
 
                 if (pValue <= alphaLevel) {
-                    msg = "Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
+                    msg = "Because the p value (" + df.format(pValue) + ") is less than or equal to " + alphaLevel + ", we successfully reject the null and have convincing " + 
                     "evidence that the alternate hypothesis (p1 - p2 < " + df.format(nullDiff) + ") is true.";
                 } else {
-                    msg = "Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
+                    msg = "Because the p value (" + df.format(pValue) + ") is greater than " + alphaLevel + ", we fail to reject the null and do not have " +
                     "convincing evidence that the alternate hypothesis (p1 - p2 < " + df.format(nullDiff) + ") is true.";
                 }
                 Utilities.writeLastMessage(msg, screenWriter, fileWriter);
@@ -147,10 +147,10 @@ public class TwoPropZTest {
                 Utilities.writeMessage(msg, screenWriter, fileWriter);
 
                 if (pValue <= alphaLevel) {
-                    msg = "Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
+                    msg = "Because the p value (" + df.format(pValue) + ") is less than or equal to " + alphaLevel + ", we successfully reject the null and have convincing " + 
                     "evidence that the alternate hypothesis (p1 - p2 > " + df.format(nullDiff) + ") is true.";
                 } else {
-                    msg = "Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
+                    msg = "Because the p value (" + df.format(pValue) + ") is greater than " + alphaLevel + ", we fail to reject the null and do not have " +
                     "convincing evidence that the alternate hypothesis (p1 - p2 > " + df.format(nullDiff) + ") is true.";
                 }
                 Utilities.writeLastMessage(msg, screenWriter, fileWriter);
@@ -161,10 +161,10 @@ public class TwoPropZTest {
                 Utilities.writeMessage(msg, screenWriter, fileWriter);
 
                 if (pValue <= alphaLevel) {
-                    msg = "Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
+                    msg = "Because the p value (" + df.format(pValue) + ") is less than or equal to " + alphaLevel + ", we successfully reject the null and have convincing " + 
                     "evidence that the alternate hypothesis (p1 - p2 != " + df.format(nullDiff) + ") is true.";
                 } else {
-                    msg = "Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
+                    msg = "Because the p value (" + df.format(pValue) + ") is greater than " + alphaLevel + ", we fail to reject the null and do not have " +
                     "convincing evidence that the alternate hypothesis (p1 - p2 != " + df.format(nullDiff) + ") is true.";
                 }
                 Utilities.writeLastMessage(msg, screenWriter, fileWriter);

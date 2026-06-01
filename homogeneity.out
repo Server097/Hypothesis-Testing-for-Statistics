@@ -1,0 +1,15 @@
+Null hypothesis (H_0): The distribution of favorite school subject is the same among the populations of schools
+
+Alternative hypothesis (H_A): The distribution of favorite school subject is different for at least one population of schools
+
+alpha level = 0.05
+
+chi squared statistic = 15.125
+
+degrees of freedom = 4
+
+p value = 0.004
+
+Assuming the null hypothesis is true (favorite school subject and schools are independent), there is approximately a 0.004 probability of obtaining a sample statistic equal to or less than the one observed in our sample purely by chance.
+
+Since the p-value is less than the alpha level, we reject the null hypothesis and conclude that the alternate hypothesis (The distribution of favorite school subject is different for at least one population of schools) is true.

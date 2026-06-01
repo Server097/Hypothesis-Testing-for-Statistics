@@ -2,90 +2,97 @@ package apstatisticsfinalproject;
 
 import org.apache.commons.math3.distribution.TDistribution;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 
 public class OneMeanTTest {
     public static void main(String[] args) throws Exception {
-        System.out.println("Welcome to the two mean t test calculator!");
+        System.out.println("Welcome to the one mean t test calculator!");
 
         // Choose
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            PrintStream pw = new PrintStream(System.out);
+            BufferedReader screenReader = new BufferedReader(new InputStreamReader(System.in));
+            PrintWriter fileWriter = new PrintWriter(new File("oneMeanTTest.out"));
+            PrintStream screenWriter = new PrintStream(System.out);
 
-            pw.println("Enter null hypothesis (format - 'μ = 0'): ");
-            double hypothesisMean = Double.parseDouble(br.readLine().split(" ")[2]);
+            String nullHypothesis = Utilities.readString(screenReader, screenWriter, "Enter null hypothesis (format - 'μ = 0'): ");
+            double hypothesisMean = Double.parseDouble(nullHypothesis.split(" ")[2]);
+            fileWriter.println("Null hypothesis (H_0): " + "μ = " + hypothesisMean);
+            fileWriter.println();
 
-            pw.println("Enter alternate hypothesis (format - 'μ </>/!= 0'): ");
-            String[] words = br.readLine().split(" ");
-            String alternateHypothesisSign = words[1];
+            String[] alternateHypothesis = Utilities.readString(screenReader, screenWriter, "Enter alternate hypothesis (format - 'μ </>/!= 0'): ").split(" ");
+            String alternateHypothesisSign = alternateHypothesis[1];
+            fileWriter.println("Alternate hypothesis (H_A): " + "μ " + alternateHypothesisSign + " " + hypothesisMean);
+            fileWriter.println();
 
-            pw.println("Enter sample mean (for sample 1): ");
-            double sampleMean = Double.parseDouble(br.readLine());
+            double sampleMean = Utilities.readDouble(screenReader, screenWriter, "Enter sample mean: ", 0);
+            fileWriter.println("sample mean = " + sampleMean);
+            fileWriter.println();
 
-            pw.println("Enter standard deviation (for sample 1): ");
-            double sampleSD = Double.parseDouble(br.readLine());
+            double sampleSD = Utilities.readDouble(screenReader, screenWriter, "Enter standard deviation: ", 0);
+            fileWriter.println("standard deviation = " + sampleSD);
+            fileWriter.println();
 
-            pw.println("Enter sample size (for sample 1): ");
-            int sampleSize = Integer.parseInt(br.readLine());
+            int sampleSize = Utilities.readInteger(screenReader, screenWriter, "Enter sample size: ", 0);
+            fileWriter.println("sample size = " + sampleSize);
+            fileWriter.println();
 
-            pw.println("Enter alpha level: ");
-            double alphaLevel = Double.parseDouble(br.readLine());
+            double alphaLevel = Utilities.readDouble(screenReader, screenWriter, "Enter alpha level: ", 0.05);
+            fileWriter.println("alpha level = " + alphaLevel);
+            fileWriter.println();
 
         // Check
             // Random condition
-            pw.println("Is random condition satisfied? (type true or false): ");
-            boolean random = Boolean.parseBoolean(br.readLine());
+            boolean random = Utilities.readBoolean(screenReader, screenWriter, "Is random condition satisfied? (type true or false):", true);
             if (random) {
-                pw.println("Random condition satisfied, results can be generalized to the entire population.");
+                screenWriter.println("Random condition satisfied, results can be generalized to the entire population.");
             } else {
-                pw.println("Random condition not satisfied, results can only be generalized to the entire sample.");
+                screenWriter.println("Random condition not satisfied, results can only be generalized to the entire sample.");
             }
 
             // 10% condition
-            pw.println("Sampling without replacement? (type true or false): ");
-            boolean samplingNoReplacement = Boolean.parseBoolean(br.readLine());
+            boolean samplingNoReplacement = Utilities.readBoolean(screenReader, screenWriter, "Sampling without replacement? (type true or false): ", true);
             if (!samplingNoReplacement) {
-                pw.println("10% condition satisfied, we can sample without replacement.");
+                screenWriter.println("10% condition satisfied, we can sample without replacement.");
             }
             else {
-                pw.println("Enter population size for sample 1 (infinity if not specified): ");
-                String line = br.readLine();
+                screenWriter.println("Enter population size (infinity if not specified): ");
+                String line = screenReader.readLine();
                 try {
                     int populationSize = Integer.parseInt(line);
                     if (sampleSize <= 0.1 * populationSize) {
-                        pw.println("10% condition satisfied");
+                        screenWriter.println("10% condition satisfied");
                     } else {
-                        pw.println("Sorry, can't continue with the procedure.");
-                        pw.close();
+                        screenWriter.println("Sorry, can't continue with the procedure.");
+                        screenWriter.close();
                         System.exit(-1);
                     }
                 } catch (NumberFormatException e) {
                     if (line.equalsIgnoreCase("infinity")) {
-                        pw.println("10% condition satisfied, trials can be treated as independent.");
+                        screenWriter.println("10% condition satisfied, trials can be treated as independent.");
                     }
                 }
             }
 
             // Large Counts condition
             if (sampleSize >= 30) {
-                pw.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
+                screenWriter.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
             } else {
-                pw.println("Does the problem say the sampling distribution is approximately normal? (type true or false): ");
-                boolean condition = Boolean.parseBoolean(br.readLine());
+                boolean condition = Utilities.readBoolean(screenReader, screenWriter, "Does the problem say the sampling distribution is approximately normal? (type true or false): ", true);
                 if (condition) {
-                    pw.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
+                    screenWriter.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
                 } else {
-                    pw.println("Sorry, can't continue with the procedure.");
-                    pw.close();
+                    screenWriter.println("Sorry, can't continue with the procedure.");
+                    screenWriter.close();
                     System.exit(-1);
                 }
             }
 
         // Calculate
             double standardError = sampleSD / Math.sqrt(sampleSize);
-            double tScore = sampleMean / standardError;
+            double tScore = (sampleMean / standardError) * 1000.0 / 1000.0;
 
             int degreesOfFreedom = sampleSize - 1;
             TDistribution tDist = new TDistribution(degreesOfFreedom);
@@ -101,42 +108,62 @@ public class OneMeanTTest {
                 pValue = Math.round(2.0 * Math.min(pLeft, pRight) * 1000.0) / 1000.0;
             }
 
+            fileWriter.println("t score = " + tScore);
+            fileWriter.println();
+            fileWriter.println("degrees of freedom = " + degreesOfFreedom);
+            fileWriter.println();
+            fileWriter.println("p value = " + pValue);
+            fileWriter.println();
+
             DecimalFormat df = new DecimalFormat("#.###");
 
         // Conclude
+            String msg;
             if (alternateHypothesisSign.equals("<")) {
-                pw.println("Assuming the null hypothesis is true (p = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
-                "sample statistic equal to or less than the one observed in our sample purely by chance.");
+                msg = "Assuming the null hypothesis is true (p = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
+                "sample statistic equal to or less than the one observed in our sample purely by chance.";
+                Utilities.writeMessage(msg, screenWriter, fileWriter);
+
                 if (pValue <= alphaLevel) {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
-                    "evidence that the alternate hypothesis (μ < " + df.format(hypothesisMean) + ") is true.");
+                    msg = "Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
+                    "evidence that the alternate hypothesis (μ < " + df.format(hypothesisMean) + ") is true.";
                 } else {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
-                    "convincing evidence that the alternate hypothesis (μ < " + df.format(hypothesisMean) + ") is true.");
+                    msg = "Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
+                    "convincing evidence that the alternate hypothesis (μ < " + df.format(hypothesisMean) + ") is true.";
                 }
+                Utilities.writeLastMessage(msg, screenWriter, fileWriter);
+
             } else if (alternateHypothesisSign.equals(">")) {
-                pw.println("Assuming the null hypothesis is true (p = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
-                "sample statistic equal to or greater than the one observed in our sample purely by chance.");
+                msg = "Assuming the null hypothesis is true (p = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
+                "sample statistic equal to or greater than the one observed in our sample purely by chance.";
+                Utilities.writeMessage(msg, screenWriter, fileWriter);
+
                 if (pValue <= alphaLevel) {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
-                    "evidence that the alternate hypothesis (μ > " + df.format(hypothesisMean) + ") is true.");
+                    msg = "Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
+                    "evidence that the alternate hypothesis (μ > " + df.format(hypothesisMean) + ") is true.";
                 } else {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
-                    "convincing evidence that the alternate hypothesis (μ > " + df.format(hypothesisMean) + ") is true.");
+                    msg = "Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
+                    "convincing evidence that the alternate hypothesis (μ > " + df.format(hypothesisMean) + ") is true.";
                 }
+                Utilities.writeLastMessage(msg, screenWriter, fileWriter);
+
             } else {
-                pw.println("Assuming the null hypothesis is true (p = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
-                "sample statistic as extreme or more extreme than the one observed in our sample in either direction, purely by chance.");
+                msg = "Assuming the null hypothesis is true (p = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
+                "sample statistic as extreme or more extreme than the one observed in our sample in either direction, purely by chance.";
+                Utilities.writeMessage(msg, screenWriter, fileWriter);
+
                 if (pValue <= alphaLevel) {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
-                    "evidence that the alternate hypothesis (μ != " + df.format(hypothesisMean) + ") is true.");
+                    msg = "Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
+                    "evidence that the alternate hypothesis (μ != " + df.format(hypothesisMean) + ") is true.";
                 } else {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
-                    "convincing evidence that the alternate hypothesis (μ != " + df.format(hypothesisMean) + ") is true.");
+                    msg = "Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
+                    "convincing evidence that the alternate hypothesis (μ != " + df.format(hypothesisMean) + ") is true.";
                 }
+                Utilities.writeLastMessage(msg, screenWriter, fileWriter);
             }
 
-        br.close();
-        pw.close();
+        screenReader.close();
+        screenWriter.close();
+        fileWriter.close();
     }
 }

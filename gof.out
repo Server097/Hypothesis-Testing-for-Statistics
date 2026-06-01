@@ -1,0 +1,17 @@
+sample size = 200
+
+Null hypothesis (H_0): The distribution of (color) is the same as the expected distribution.
+
+Alternative hypothesis (H_A): The distribution of the categorical variable (color) is not the same as the expected distribution.
+
+alpha level = 0.05
+
+chi squared statistic = 5.125
+
+degrees of freedom = 4
+
+p value = 0.275
+
+Assuming the null hypothesis is true (the distribution of color is the same as the expected distribution), there is approximately a 0.275 probability of obtaining a sample statistic equal to or less than the one observed in our sample purely by chance.
+
+Since the p-value is greater than or equal to the alpha level, we fail to reject the null hypothesis and do not have enough evidence to conclude that the alternate hypothesis (the distribution of color is different from the expected distribution) is true.

@@ -3,12 +3,58 @@
  */
 package apstatisticsfinalproject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+
 public class Main {
-    public String getGreeting() {
-        return "Hello World!";
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader screenReader = new BufferedReader(new InputStreamReader(System.in));
+        PrintStream screenWriter = new PrintStream(System.out);
+        screenWriter.println("Welcome to the AP Statistics hypothesis test calculator! Please select which hypothesis test you would like to perform: ");
+        screenWriter.println("1. One mean t test");
+        screenWriter.println("2. Two mean t test");
+        screenWriter.println("3. Matched pairs t test");
+        screenWriter.println("4. Linear regression t test");
+        screenWriter.println("5. One proportion z test");
+        screenWriter.println("6. Two proportion z test");
+        screenWriter.println("7. Chi squared homogeneity test");
+        screenWriter.println("8. Chi squared independence test");
+        screenWriter.println("9. Chi squared goodness of fit test");
+        int testChoice = Utilities.readInteger(screenReader, screenWriter, "Enter your choice (1-9): ", 1);
+        switch (testChoice) {
+            case 1:
+                OneMeanTTest.main(args);
+                break;
+            case 2:
+                TwoMeanTTest.main(args);
+                break;
+            case 3:
+                MatchedPairsTTest.main(args);
+                break;
+            case 4:
+                LinRegTTest.main(args);
+                break;
+            case 5:
+                OnePropZTest.main(args);
+                break;
+            case 6:
+                TwoPropZTest.main(args);
+                break;
+            case 7:
+                ChiSquaredHomogeneityTest.main(args);
+                break;
+            case 8:
+                ChiSquaredIndependenceTest.main(args);
+                break;
+            case 9:
+                ChiSquaredGOFTest.main(args);
+                break;
+            default:
+                screenWriter.println("Invalid choice. Please run the program again and select a valid option.");
+        }
+
     }
 
-    public static void main(String[] args) {
-        System.out.println(new Main().getGreeting());
-    }
 }

@@ -2,8 +2,10 @@ package apstatisticsfinalproject;
 
 import org.apache.commons.math3.distribution.TDistribution;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 
 public class MatchedPairsTTest {
@@ -11,44 +13,43 @@ public class MatchedPairsTTest {
         System.out.println("Welcome to the matched pairs t test calculator! (order of subtraction is sample 1 - sample 2)");
 
         // Choose
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            PrintStream pw = new PrintStream(System.out);
+            BufferedReader screenReader = new BufferedReader(new InputStreamReader(System.in));
+            PrintStream screenWriter = new PrintStream(System.out);
+            PrintWriter fileWriter = new PrintWriter(new File("matchedPairsTTest.out"));
 
-            pw.println("Enter null hypothesis (format - 'μ_diff = 0'): ");
-            double hypothesisMean = Double.parseDouble(br.readLine().split(" ")[2]);
+            String[] nullHypothesis = Utilities.readString(screenReader, screenWriter,"Enter null hypothesis (format - 'μ_diff = 0'): " ).split(" ");
+            double hypothesisMean = Double.parseDouble(nullHypothesis[2]);
 
-            pw.println("Enter alternate hypothesis (format - 'μ_diff </>/!= 0'): ");
-            String[] words = br.readLine().split(" ");
-            String alternateHypothesisSign = words[1];
+            fileWriter.println("Null hypothesis (H_0): " + "μ_diff = " + hypothesisMean);
+            fileWriter.println();
 
-            pw.println("Enter sample size (same sample size for both samples): ");
-            int sampleSize = Integer.parseInt(br.readLine());
+            screenWriter.println("Enter alternate hypothesis (format - 'μ_diff </>/!= 0'): ");
+            String[] alternateHypothesis = Utilities.readString(screenReader, screenWriter, "Enter alternate hypothesis (format - 'μ_diff </>/!= 0'): ").split(" ");
+            String alternateHypothesisSign = alternateHypothesis[1];
+            fileWriter.println("Alternate hypothesis (H_A): " + "μ_diff " + alternateHypothesisSign + " " + hypothesisMean);
+            fileWriter.println();
 
-            pw.println("Are you entering the values for the samples or do you already have the sample mean and SD? (enter 'v' for values or 's' for sample mean and SD)");
+            int sampleSize = Utilities.readInteger(screenReader, screenWriter, "Enter sample size (same sample size for both samples): ", 0);
+            fileWriter.println("sample size = " + sampleSize);
+            fileWriter.println();
 
+            String inputType = Utilities.readString(screenReader, screenWriter, "Are you entering the values for the samples or do you already have the sample mean and SD? (enter 'v' for values or 's' for sample mean and SD)"); 
+            
             double sampleMeanDiff, sampleSD;
-
-            if (br.readLine().equals("s")) {
-                pw.println("Enter sample mean difference: ");
-                sampleMeanDiff = Double.parseDouble(br.readLine());
-
-                pw.println("Enter standard deviation of differences: ");
-                sampleSD = Double.parseDouble(br.readLine());
-            }
-
-            else {
+            if (inputType.equals("s")) {
+                sampleMeanDiff = Utilities.readDouble(screenReader, screenWriter, "Enter sample mean difference: ", 0);
+                sampleSD = Utilities.readDouble(screenReader, screenWriter, "Enter standard deviation of differences: ", 0);
+            } else {
                 double[] differences = new double[sampleSize];
                 double[] sample1Values = new double[sampleSize];
                 double[] sample2Values = new double[sampleSize];
 
                 for (int i = 0; i < sampleSize; i++) {
-                    pw.println("Enter value " + (i + 1) + " for sample 1" + ": ");
-                    sample1Values[i] = Double.parseDouble(br.readLine());
+                    sample1Values[i] = Utilities.readDouble(screenReader, screenWriter, "Enter value " + (i + 1) + " for sample 1: ", 0);
                 }
 
                 for (int i = 0; i < sampleSize; i++) {
-                    pw.println("Enter value " + (i + 1) + " for sample 2" + ": ");
-                    sample2Values[i] = Double.parseDouble(br.readLine());
+                    sample2Values[i] = Utilities.readDouble(screenReader, screenWriter, "Enter value " + (i + 1) + " for sample 2: ", 0);
                 }
 
                 for (int i = 0; i < sampleSize; i++) {
@@ -71,55 +72,54 @@ public class MatchedPairsTTest {
                 sampleSD = Math.sqrt(varianceDiff);
             }
 
-            pw.println("Enter alpha level: ");
-            double alphaLevel = Double.parseDouble(br.readLine());
+            double alphaLevel = Utilities.readDouble(screenReader, screenWriter, "Enter alpha level: ", 0.05);
 
         // Check
             // Random condition
-            pw.println("Is random condition satisfied? (type true or false): ");
-            boolean random = Boolean.parseBoolean(br.readLine());
+            screenWriter.println("Is random condition satisfied? (type true or false): ");
+            boolean random = Boolean.parseBoolean(screenReader.readLine());
             if (random) {
-                pw.println("Random condition satisfied, results can be generalized to the entire population.");
+                screenWriter.println("Random condition satisfied, results can be generalized to the entire population.");
             } else {
-                pw.println("Random condition not satisfied, results can only be generalized to the entire sample.");
+                screenWriter.println("Random condition not satisfied, results can only be generalized to the entire sample.");
             }
 
             // 10% condition
-            pw.println("Sampling without replacement? (type true or false): ");
-            boolean samplingNoReplacement = Boolean.parseBoolean(br.readLine());
+            screenWriter.println("Sampling without replacement? (type true or false): ");
+            boolean samplingNoReplacement = Boolean.parseBoolean(screenReader.readLine());
             if (!samplingNoReplacement) {
-                pw.println("10% condition satisfied, we can sample without replacement.");
+                screenWriter.println("10% condition satisfied, we can sample without replacement.");
             }
             else {
-                pw.println("Enter population size for sample 1 (infinity if not specified): ");
-                String line = br.readLine();
+                screenWriter.println("Enter population size for sample 1 (infinity if not specified): ");
+                String line = screenReader.readLine();
                 try {
                     int populationSize = Integer.parseInt(line);
                     if (sampleSize <= 0.1 * populationSize) {
-                        pw.println("10% condition satisfied");
+                        screenWriter.println("10% condition satisfied");
                     } else {
-                        pw.println("Sorry, can't continue with the procedure.");
-                        pw.close();
+                        screenWriter.println("Sorry, can't continue with the procedure.");
+                        screenWriter.close();
                         System.exit(-1);
                     }
                 } catch (NumberFormatException e) {
                     if (line.equalsIgnoreCase("infinity")) {
-                        pw.println("10% condition satisfied, trials can be treated as independent.");
+                        screenWriter.println("10% condition satisfied, trials can be treated as independent.");
                     }
                 }
             }
 
             // Large Counts condition
             if (sampleSize >= 30) {
-                pw.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
+                screenWriter.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
             } else {
-                pw.println("Does the problem say the sampling distribution is approximately normal? (type true or false): ");
-                boolean condition = Boolean.parseBoolean(br.readLine());
+                screenWriter.println("Does the problem say the sampling distribution is approximately normal? (type true or false): ");
+                boolean condition = Boolean.parseBoolean(screenReader.readLine());
                 if (condition) {
-                    pw.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
+                    screenWriter.println("Large Counts condition satisfied, sampling distribution can be treated as approximately normal.");
                 } else {
-                    pw.println("Sorry, can't continue with the procedure.");
-                    pw.close();
+                    screenWriter.println("Sorry, can't continue with the procedure.");
+                    screenWriter.close();
                     System.exit(-1);
                 }
             }
@@ -142,42 +142,62 @@ public class MatchedPairsTTest {
                 pValue = Math.round(2.0 * Math.min(pLeft, pRight) * 1000.0) / 1000.0;
             }
 
+            fileWriter.println("t score = " + tScore);
+            fileWriter.println();
+            fileWriter.println("degrees of freedom = " + degreesOfFreedom);
+            fileWriter.println();
+            fileWriter.println("p value = " + pValue);
+            fileWriter.println();
+
             DecimalFormat df = new DecimalFormat("#.###");
 
         // Conclude
+            String msg;
             if (alternateHypothesisSign.equals("<")) {
-                pw.println("Assuming the null hypothesis is true (μ_diff = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
+                msg = ("Assuming the null hypothesis is true (μ_diff = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
                 "sample statistic equal to or less than the one observed in our sample purely by chance.");
+                Utilities.writeMessage(msg, screenWriter, fileWriter);
+
                 if (pValue <= alphaLevel) {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
+                    msg = ("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
                     "evidence that the alternate hypothesis (μ_diff < " + df.format(hypothesisMean) + ") is true.");
                 } else {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
+                    msg = ("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
                     "convincing evidence that the alternate hypothesis (μ_diff < " + df.format(hypothesisMean) + ") is true.");
                 }
+                Utilities.writeLastMessage(msg, screenWriter, fileWriter);
+
             } else if (alternateHypothesisSign.equals(">")) {
-                pw.println("Assuming the null hypothesis is true (μ_diff = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
+                msg = ("Assuming the null hypothesis is true (μ_diff = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
                 "sample statistic equal to or greater than the one observed in our sample purely by chance.");
+                Utilities.writeMessage(msg, screenWriter, fileWriter);
+                
                 if (pValue <= alphaLevel) {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
+                    msg = ("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
                     "evidence that the alternate hypothesis (μ_diff > " + df.format(hypothesisMean) + ") is true.");
                 } else {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
+                    msg = ("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
                     "convincing evidence that the alternate hypothesis (μ_diff > " + df.format(hypothesisMean) + ") is true.");
                 }
+                Utilities.writeLastMessage(msg, screenWriter, fileWriter);
+
             } else {
-                pw.println("Assuming the null hypothesis is true (μ_diff = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
+                msg = ("Assuming the null hypothesis is true (μ_diff = " + df.format(hypothesisMean) + "), " + "there is approximately a " + df.format(pValue) + " probability of obtaining a " +
                 "sample statistic as extreme or more extreme than the one observed in our sample in either direction, purely by chance.");
+                Utilities.writeMessage(msg, screenWriter, fileWriter);
+
                 if (pValue <= alphaLevel) {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
+                    msg = ("Because the p value (" + df.format(pValue) + ") is less than " + alphaLevel + ", we successfully reject the null and have convincing " + 
                     "evidence that the alternate hypothesis (μ_diff != " + df.format(hypothesisMean) + ") is true.");
                 } else {
-                    pw.println("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
+                    msg = ("Because the p value (" + df.format(pValue) + ") is not less than " + alphaLevel + ", we fail to reject the null and do not have " +
                     "convincing evidence that the alternate hypothesis (μ_diff != " + df.format(hypothesisMean) + ") is true.");
                 }
+                Utilities.writeLastMessage(msg, screenWriter, fileWriter);
             }
 
-        br.close();
-        pw.close();
+        screenReader.close();
+        screenWriter.close();
+        fileWriter.close();
     }
 }
